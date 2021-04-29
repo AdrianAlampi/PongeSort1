@@ -23,10 +23,9 @@ public class Serverino {
     public static void main(String[] args) {
          try {
             ServerSocket server=new ServerSocket(5000);
-            System.out.println("Server attivo e in ascolto");
             while(true){
-                Socket client=server.accept();
-                Thread serverino=new Thread(new Serverino1(client));
+                Socket socketClient=server.accept();
+                Thread serverino=new Thread(new Serverino1(socketClient));
                 serverino.start();
         }
         } catch (IOException ex) {

@@ -10,6 +10,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -30,18 +31,18 @@ public class Serverino1 implements Runnable {
 
     @Override
     public void run() {
-        char carattere;
         try {
-            OutputStream Client = clientSocket.getOutputStream();
-//            BufferedWriter Write = new BufferedWriter(new OutputStreamWriter(Client));
-            InputStream dalClient = clientSocket.getInputStream();
-            BufferedReader lettore = new BufferedReader(new InputStreamReader(dalClient));
-            carattere = (char) lettore.read();
-            System.out.println(carattere);
-            lettore.close();
-//            Write.close();
+            ObjectInputStream In = new ObjectInputStream(clientSocket.getInputStream());
+            char[] lista = (char[]) In.readObject();
+            In.close();
+            for (int i = 0; i < lista.length; i++) {
+                System.out.print(lista[i] + " , ");
+            }
+            System.out.println("");
             System.out.println("The END");
         } catch (IOException ex) {
+            Logger.getLogger(Serverino1.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(Serverino1.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
